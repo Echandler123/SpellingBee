@@ -22,7 +22,7 @@ import java.util.Scanner;
  * It utilizes recursion to generate the strings, mergesort to sort them, and
  * binary search to find them in a dictionary.
  *
- * @author Zach Blick, [ADD YOUR NAME HERE]
+ * @author Zach Blick, Elijah Chandler
  *
  * Written on March 5, 2023 for CS2 @ Menlo School
  *
@@ -44,7 +44,9 @@ public class SpellingBee {
     //  Store them all in the ArrayList words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void generate() {
+        makeWords("", letters);
         // YOUR CODE HERE — Call your recursive method!
+
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
@@ -135,5 +137,17 @@ public class SpellingBee {
             System.out.println("Could not write to output file.");
         }
         s.close();
+    }
+    public ArrayList<String> makeWords(String word, String letters)
+    {
+        if(letters.length() == 0)
+        {
+            return words;
+        }
+        words.add(word);
+        word = letters.substring(0,1);
+        letters = letters.substring(1,letters.length());
+        makeWords(word,letters);
+        return words;
     }
 }
