@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Scanner;
 
 /**
@@ -72,6 +73,9 @@ public class SpellingBee {
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
         // YOUR CODE HERE
+        for(int i =0; i < words.size();i++) {
+            Search(words.get(i),DICTIONARY_SIZE,DICTIONARY);
+        }
     }
 
     // Prints all valid words to wordList.txt
@@ -159,7 +163,7 @@ public class SpellingBee {
     {
         if (high - low == 0) {			// Base case
             ArrayList <String> newArr = new ArrayList <String>();
-            newArr.set(0,arr.get(low));
+            newArr.add(0,arr.get(low));
             return newArr;
         }
         int med = (high + low) / 2;
@@ -195,6 +199,29 @@ public class SpellingBee {
             }
         }
         return arr3;
+    }
+    public boolean Search(String word,int size, String[]newDictionary)
+    {
+        int midpoint = size/2;
+        if(word.equals(newDictionary[midpoint])) {
+            return true;
+        }
+        if(word.compareTo(newDictionary[midpoint]) < 0)
+        {
+            for(int j =0; j < midpoint;j++)
+            {
+                newDictionary[j] = DICTIONARY[j];
+            }
+        }
+        else if(word.compareTo(newDictionary[midpoint]) > 0)
+        {
+            for(int j = midpoint; j < DICTIONARY_SIZE; j++)
+            {
+                newDictionary[j] = DICTIONARY[j];
+            }
+        }
+        Search(word,midpoint,newDictionary);
+        return false;
     }
 
 }
