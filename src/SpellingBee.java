@@ -53,6 +53,7 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
+        mergesort(words, 0, words.size());
     }
 
     // Removes duplicates from the sorted list.
@@ -138,16 +139,62 @@ public class SpellingBee {
         }
         s.close();
     }
-    public ArrayList<String> makeWords(String word, String letters)
+    public void makeWords(String word, String letters)
     {
-        if(letters.length() == 0)
+        if(letters.length() == word.length())
         {
-            return words;
+            return;
         }
-        words.add(word);
-        word = letters.substring(0,1);
-        letters = letters.substring(1,letters.length());
-        makeWords(word,letters);
-        return words;
+        String newletters = "";
+        String newword = "";
+        for(int i = 0; i < letters.length(); i++)
+        {
+            newword = word + letters.substring(i, i+1);
+            words.add(newword);
+            newletters = letters.substring(0,i) + letters.substring(i+1);
+            makeWords(newword,newletters);
+        }
     }
+    public ArrayList<String> mergesort(ArrayList <String> arr,int low, int high)
+    {
+        if (high - low == 0) {			// Base case
+            ArrayList <String> newArr = new ArrayList <String>();
+            newArr.set(0,arr.get(low));
+            return newArr;
+        }
+        int med = (high + low) / 2;
+        ArrayList<String> arr1 = mergesort(arr, low, med);
+        ArrayList<String> arr2 = mergesort(arr, med + 1, high);
+        return merge(arr1, arr2);
+    }
+    public ArrayList<String> merge(ArrayList<String> arr1,ArrayList<String> arr2)
+    {
+        ArrayList<String> arr3 = new ArrayList <String>();
+        int i = 0, j = 0;
+        while (i < arr1.size() && j < arr2.size()) {
+            if (arr1.get(i).compareTo(arr2.get(j)) <= 0) {
+                arr3.add(arr1.get(i));
+                i++;
+            } else {
+                arr3.add(arr2.get(j));
+                j++;
+            }
+        }
+        if(arr1.size() < arr2.size())
+        {
+            for(int k = j; k < arr2.size(); k++)
+            {
+                arr3.add(arr2.get(k));
+            }
+        }
+        else if(arr2.size() < arr1.size())
+        {
+            for(int k = i; k < arr1.size(); k++)
+            {
+                arr3.add(arr1.get(k));
+            }
+        }
+        return arr3;
+    }
+
 }
