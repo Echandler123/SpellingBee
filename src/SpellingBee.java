@@ -74,7 +74,10 @@ public class SpellingBee {
     public void checkWords() {
         // YOUR CODE HERE
         for(int i =0; i < words.size();i++) {
-            Search(words.get(i),DICTIONARY_SIZE,DICTIONARY);
+            if(found(words.get(i),0,DICTIONARY_SIZE,DICTIONARY) == false)
+            {
+                words.remove(i);
+            }
         }
     }
 
@@ -115,7 +118,6 @@ public class SpellingBee {
             DICTIONARY[i++] = s.nextLine();
         }
     }
-
     public static void main(String[] args) {
 
         // Prompt for letters until given only letters.
@@ -143,27 +145,24 @@ public class SpellingBee {
         }
         s.close();
     }
-    public void makeWords(String word, String letters)
-    {
-        if(letters.length() == word.length())
-        {
+    // Generates all permutations and combinations of the letters given
+    public void makeWords(String word, String letters) {
+        if(letters.length() == word.length()) {
             return;
         }
-        String newletters = "";
-        String newword = "";
-        for(int i = 0; i < letters.length(); i++)
-        {
-            newword = word + letters.substring(i, i+1);
-            words.add(newword);
-            newletters = letters.substring(0,i) + letters.substring(i+1);
-            makeWords(newword,newletters);
+        String newLetters = "";
+        String newWord = "";
+        for(int i = 0; i < letters.length(); i++) {
+            newWord = word + letters.substring(i, i+1);
+            words.add(newWord);
+            newLetters = letters.substring(0,i) + letters.substring(i+1);
+            makeWords(newWord,newLetters);
         }
     }
-    public ArrayList<String> mergesort(ArrayList <String> arr,int low, int high)
-    {
+    // Sorts the arraylist of words given in alphabetical order
+    public ArrayList<String> mergesort(ArrayList <String> arr,int low, int high) {
         if (high - low == 0) {			// Base case
             ArrayList <String> newArr = new ArrayList <String>();
-            newArr.add(0,arr.get(low));
             return newArr;
         }
         int med = (high + low) / 2;
@@ -171,57 +170,49 @@ public class SpellingBee {
         ArrayList<String> arr2 = mergesort(arr, med + 1, high);
         return merge(arr1, arr2);
     }
-    public ArrayList<String> merge(ArrayList<String> arr1,ArrayList<String> arr2)
-    {
+    // Sorts the two given arrays into one array that has all elements sorted alphabetically
+    public ArrayList<String> merge(ArrayList<String> arr1,ArrayList<String> arr2) {
         ArrayList<String> arr3 = new ArrayList <String>();
-        int i = 0, j = 0;
+        int i = 0;
+        int j = 0;
         while (i < arr1.size() && j < arr2.size()) {
             if (arr1.get(i).compareTo(arr2.get(j)) <= 0) {
                 arr3.add(arr1.get(i));
                 i++;
-            } else {
+            }
+            else {
                 arr3.add(arr2.get(j));
                 j++;
             }
         }
         if(arr1.size() < arr2.size())
         {
-            for(int k = j; k < arr2.size(); k++)
-            {
+            for(int k = j; k < arr2.size(); k++) {
                 arr3.add(arr2.get(k));
             }
         }
-        else if(arr2.size() < arr1.size())
-        {
-            for(int k = i; k < arr1.size(); k++)
-            {
+        else if(arr2.size() < arr1.size()) {
+            for(int k = i; k < arr1.size(); k++) {
                 arr3.add(arr1.get(k));
             }
         }
         return arr3;
     }
-    public boolean Search(String word,int size, String[]newDictionary)
-    {
-        int midpoint = size/2;
-        if(word.equals(newDictionary[midpoint])) {
+    // Searches the dictionary to see if the word given is in the dictionary
+    public boolean found(String word, int low,int high, String[]newDictionary) {
+        int midPoint = (high + low)/2;
+        if(word.equals(newDictionary[midPoint])) {
             return true;
         }
-        if(word.compareTo(newDictionary[midpoint]) < 0)
-        {
-            for(int j =0; j < midpoint;j++)
-            {
-                newDictionary[j] = DICTIONARY[j];
-            }
+        if(low == high) {
+            return false;
         }
-        else if(word.compareTo(newDictionary[midpoint]) > 0)
-        {
-            for(int j = midpoint; j < DICTIONARY_SIZE; j++)
-            {
-                newDictionary[j] = DICTIONARY[j];
-            }
+        if(word.compareTo(newDictionary[midPoint]) < 0) {
+            found(word,low,midPoint - 1,newDictionary);
         }
-        Search(word,midpoint,newDictionary);
+        else {
+            found(word,midPoint + 1,high,newDictionary);
+        }
         return false;
     }
-
 }
