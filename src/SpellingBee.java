@@ -74,8 +74,7 @@ public class SpellingBee {
     public void checkWords() {
         // YOUR CODE HERE
         for(int i =0; i < words.size();i++) {
-            if(found(words.get(i),0,DICTIONARY_SIZE,DICTIONARY) == false)
-            {
+            if(found(words.get(i),0,DICTIONARY_SIZE,DICTIONARY) == false) {
                 words.remove(i);
             }
         }

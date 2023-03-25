@@ -1,7 +1,1 @@
-ab
-ac
-b
-bac
-bca
-ca
-cb
+t
